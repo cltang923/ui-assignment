@@ -20,4 +20,4 @@ npm run populate-data
 ```
 npm run dev
 ```
-the server will host on http://localhost:8080
+the server will host on http://localhost:8080, and host swagger api document on http://localhost:8080/document/

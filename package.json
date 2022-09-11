@@ -33,6 +33,8 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "pg": "^8.8.0",
-    "sequelize": "^6.21.6"
+    "sequelize": "^6.21.6",
+    "swagger-ui-express": "^4.5.0",
+    "yamljs": "^0.3.0"
   }
 }

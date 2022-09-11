@@ -2,9 +2,17 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import { User } from './utils/postgres/data.js'
 import { verifyToken, verifySignInRequest } from './middleware.js'
-import jwt from 'jsonwebtoken'
-import { getConfig } from './utils/config.js'
 import isEmpty from 'lodash/isEmpty.js'
+import jwt from 'jsonwebtoken'
+import path, { dirname } from 'path'
+import { getConfig } from './utils/config.js'
+import swaggerUi from 'swagger-ui-express'
+import { fileURLToPath } from 'url'
+import YAML from 'yamljs'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const swaggerConfig = YAML.load(path.resolve(__dirname, './document/swagger.yml'))
 
 const app = express()
 
@@ -12,6 +20,11 @@ const port = 8080
 const DAY_IN_SECONDS = 60 * 60 * 24
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+/*
+    * [Document]
+*/
+app.use('/document', swaggerUi.serve, swaggerUi.setup(swaggerConfig))
 
 /*
     * [GET] list all users.

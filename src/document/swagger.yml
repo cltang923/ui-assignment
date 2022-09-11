@@ -1,0 +1,222 @@
+openapi: 3.0.3
+info:
+  title: API 文件
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.0
+servers:
+  - url: http://localhost:8080
+    description: Optional server description, e.g. Main (production) server
+paths:
+  /users:
+    get:
+      summary: list all users
+      parameters:
+        - in: header
+          name: x-access-token
+          schema:
+            type: string
+          required: true
+          description: sign in first to get the x-access-token
+        - in: query
+          name: offset
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /user:
+    get:
+      summary: search an user by fullname.
+      parameters:
+        - in: header
+          name: x-access-token
+          schema:
+            type: string
+          required: true
+          description: sign in first to get the x-access-token
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    post:
+      summary: user sign in.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                acct:
+                  type: string
+                pwd:
+                  type: string
+              required:
+                - acct
+                - pwd
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+  /user/{acct}:
+    get:
+      summary: get the user’s detailed information by given acct.
+      parameters:
+        - in: header
+          name: x-access-token
+          schema:
+            type: string
+          required: true
+          description: sign in first to get the x-access-token
+        - in: path
+          name: acct
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      summary: delete user by given acct
+      parameters:
+        - in: header
+          name: x-access-token
+          schema:
+            type: string
+          required: true
+          description: sign in first to get the x-access-token
+        - in: path
+          name: acct
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+    put:
+      summary: update user by given object
+      parameters:
+        - in: header
+          name: x-access-token
+          schema:
+            type: string
+          required: true
+          description: sign in first to get the x-access-token
+        - in: path
+          name: acct
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                pwd:
+                  type: string
+              required:
+                - name
+                - pwd
+      responses:
+        '200':
+          description: successful operation
+  /user/{name}:
+    post:
+      summary: user sign up. (create user)
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                acct:
+                  type: string
+                pwd:
+                  type: string
+              required:
+                - acct
+                - pwd
+      responses:
+        '200':
+          description: successful operation
+  /userName/{acct}:
+    put:
+      summary: update user name
+      parameters:
+        - in: header
+          name: x-access-token
+          schema:
+            type: string
+          required: true
+          description: sign in first to get the x-access-token
+        - in: path
+          name: acct
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        '200':
+          description: successful operation
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        acct:
+          type: string
+          example: cltang@gmail.com
+        fullname:
+          type: string
+          example: KathyTang
+      xml:
+        name: user
