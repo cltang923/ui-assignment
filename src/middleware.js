@@ -26,3 +26,22 @@ export const verifyToken = async (
   }
   next()
 }
+
+export const verifySignInRequest = (
+  req,
+  res,
+  next
+) => {
+  const { acct, pwd } = req.body
+  if (isEmpty(acct)) {
+    const errMsg = 'acct in the request is empty'
+    console.log(errMsg)
+    return res.status(400).send({ errMsg })
+  }
+  if (isEmpty(pwd)) {
+    const errMsg = 'pwd is empty'
+    console.log(errMsg)
+    return res.status(400).send({ errMsg })
+  }
+  next()
+}

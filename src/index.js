@@ -1,7 +1,8 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { User } from './utils/postgres/data.js'
-import { verifyToken } from './middleware.js'
+import { verifyToken, verifySignInRequest } from './middleware.js'
+import isEmpty from 'lodash/isEmpty.js'
 
 const app = express()
 
@@ -71,6 +72,31 @@ app.get('/user/:acct', verifyToken, async (req, res) => {
     return res.status(500).send({ errMsg })
   }
   return res.status(200).send(user)
+})
+
+/*
+    * [POST] sign up. (create user)
+*/
+app.post('/user/:name', verifySignInRequest, async (req, res) => {
+  let user
+  const { name } = req.params
+  const { acct, pwd } = req.body
+  if (isEmpty(name)) {
+    return res.status(400).send({ errMsg: 'name is empty' })
+  }
+  try {
+    user = await User.findByPk(acct)
+    if (!isEmpty(user)) {
+      throw new Error(`account ${acct} already exist`)
+    }
+    // create user
+    await User.create({ acct, fullname: name, pwd })
+  } catch (err) {
+    const errMsg = `failed to sign up for user ${acct} : ${err}`
+    console.error(errMsg)
+    return res.status(500).send({ errMsg })
+  }
+  return res.status(200).end()
 })
 
 app.listen(port, (err) => {
