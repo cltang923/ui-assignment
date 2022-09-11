@@ -2,11 +2,14 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import { User } from './utils/postgres/data.js'
 import { verifyToken, verifySignInRequest } from './middleware.js'
+import jwt from 'jsonwebtoken'
+import { getConfig } from './utils/config.js'
 import isEmpty from 'lodash/isEmpty.js'
 
 const app = express()
 
 const port = 8080
+const DAY_IN_SECONDS = 60 * 60 * 24
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -97,6 +100,34 @@ app.post('/user/:name', verifySignInRequest, async (req, res) => {
     return res.status(500).send({ errMsg })
   }
   return res.status(200).end()
+})
+
+/*
+    * [POST] user sign in.
+*/
+app.post('/user', verifySignInRequest, async (req, res) => {
+  let token
+  let user
+  const { acct, pwd } = req.body
+  try {
+    user = await User.findByPk(acct)
+    if (isEmpty(user)) {
+      throw new Error(`account ${acct} not exist`)
+    }
+    if (pwd !== user.pwd) {
+      throw new Error('password is wrong')
+    }
+    const { privateKey } = getConfig()
+    token = jwt.sign({ acct: user.acct }, privateKey, {
+      expiresIn: DAY_IN_SECONDS,
+      algorithm: 'RS256'
+    })
+  } catch (err) {
+    const errMsg = `failed to sign up for user ${acct} : ${err}`
+    console.error(errMsg)
+    return res.status(500).send({ errMsg })
+  }
+  return res.status(200).send({ token })
 })
 
 app.listen(port, (err) => {
