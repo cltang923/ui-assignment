@@ -9,6 +9,7 @@ import { getConfig } from './utils/config.js'
 import swaggerUi from 'swagger-ui-express'
 import { fileURLToPath } from 'url'
 import YAML from 'yamljs'
+import xss from 'xss'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -42,7 +43,7 @@ app.get('/users', verifyToken, async (req, res) => {
   } catch (err) {
     const errMsg = `failed to list all users : ${err}`
     console.error(errMsg)
-    return res.status(500).send({ errMsg })
+    return res.status(500).send({ errMsg: xss(errMsg) })
   }
   return res.status(200).send(users)
 })
@@ -66,7 +67,7 @@ app.get('/user', verifyToken, async (req, res) => {
   } catch (err) {
     const errMsg = `failed to search an user by fullname : ${err}`
     console.error(errMsg)
-    return res.status(500).send({ errMsg })
+    return res.status(500).send({ errMsg: xss(errMsg) })
   }
   return res.status(200).send(user)
 })
@@ -85,7 +86,7 @@ app.get('/user/:acct', verifyToken, async (req, res) => {
   } catch (err) {
     const errMsg = `failed to get user's detail info by id ${acct} : ${err}`
     console.error(errMsg)
-    return res.status(500).send({ errMsg })
+    return res.status(500).send({ errMsg: xss(errMsg) })
   }
   return res.status(200).send(user)
 })
@@ -109,7 +110,7 @@ app.put('/userName/:acct', verifyToken, async (req, res) => {
   } catch (err) {
     const errMsg = `failed to update user's name of ${acct} : ${err}`
     console.error(errMsg)
-    return res.status(500).send({ errMsg })
+    return res.status(500).send({ errMsg: xss(errMsg) })
   }
   return res.status(200).send({ token })
 })
@@ -134,7 +135,7 @@ app.post('/user/:name', verifySignInRequest, async (req, res) => {
   } catch (err) {
     const errMsg = `failed to sign up for user ${acct} : ${err}`
     console.error(errMsg)
-    return res.status(500).send({ errMsg })
+    return res.status(500).send({ errMsg: xss(errMsg) })
   }
   return res.status(200).end()
 })
@@ -162,7 +163,7 @@ app.post('/user', verifySignInRequest, async (req, res) => {
   } catch (err) {
     const errMsg = `failed to sign up for user ${acct} : ${err}`
     console.error(errMsg)
-    return res.status(500).send({ errMsg })
+    return res.status(500).send({ errMsg: xss(errMsg) })
   }
   return res.status(200).send({ token })
 })
@@ -181,7 +182,7 @@ app.delete('/user/:acct', verifyToken, async (req, res) => {
   } catch (err) {
     const errMsg = `failed to delete user ${acct} : ${err}`
     console.error(errMsg)
-    return res.status(500).send({ errMsg })
+    return res.status(500).send({ errMsg: xss(errMsg) })
   }
   return res.status(200).end()
 })
@@ -208,7 +209,7 @@ app.put('/user/:acct', verifyToken, async (req, res) => {
   } catch (err) {
     const errMsg = `failed to update user ${acct} : ${err}`
     console.error(errMsg)
-    return res.status(500).send({ errMsg })
+    return res.status(500).send({ errMsg: xss(errMsg) })
   }
   return res.status(200).send({ token })
 })
