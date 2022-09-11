@@ -10,3 +10,8 @@ npm run generate-key
 ```
 npm run run-postgres
 ```
+
+### 3: Create a new script to populate an users table in package.json.
+```
+npm run populate-data
+```

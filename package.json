@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "generate-key": "node src/script/key-generator/index.js",
-    "run-postgres": "node src/script/postgres/run.js"
+    "run-postgres": "node src/script/postgres/run.js",
+    "populate-data": "node src/script/postgres/populate.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,8 @@
   },
   "dependencies": {
     "crypto": "^1.0.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "pg": "^8.8.0",
+    "sequelize": "^6.21.6"
   }
 }
