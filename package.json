@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "generate-key": "node src/script/key-generator/index.js"
+    "generate-key": "node src/script/key-generator/index.js",
+    "run-postgres": "node src/script/postgres/run.js"
   },
   "repository": {
     "type": "git",
