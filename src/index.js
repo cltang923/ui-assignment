@@ -54,6 +54,25 @@ app.get('/user', verifyToken, async (req, res) => {
   return res.status(200).send(user)
 })
 
+/*
+    * [GET] get the user’s detailed information by given acct.
+*/
+app.get('/user/:acct', verifyToken, async (req, res) => {
+  let user
+  const { acct } = req.params
+  try {
+    user = await User.findByPk(acct, { attributes: ['id', 'acct', 'fullname'] })
+    if (!user) {
+      throw new Error('user not found')
+    }
+  } catch (err) {
+    const errMsg = `failed to get user's detail info by id ${acct} : ${err}`
+    console.error(errMsg)
+    return res.status(500).send({ errMsg })
+  }
+  return res.status(200).send(user)
+})
+
 app.listen(port, (err) => {
   if (err) {
     return console.error(err)
