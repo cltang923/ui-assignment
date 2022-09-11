@@ -30,6 +30,30 @@ app.get('/users', verifyToken, async (req, res) => {
   return res.status(200).send(users)
 })
 
+/*
+    * [GET] search an user by fullname.
+*/
+app.get('/user', verifyToken, async (req, res) => {
+  let user
+  const { name } = req.query
+  try {
+    user = await User.findOne({
+      attributes: ['id', 'acct', 'fullname'],
+      where: {
+        fullname: name
+      }
+    })
+    if (!user) {
+      throw new Error(`user ${name} not found`)
+    }
+  } catch (err) {
+    const errMsg = `failed to search an user by fullname : ${err}`
+    console.error(errMsg)
+    return res.status(500).send({ errMsg })
+  }
+  return res.status(200).send(user)
+})
+
 app.listen(port, (err) => {
   if (err) {
     return console.error(err)
