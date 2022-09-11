@@ -1,0 +1,31 @@
+{
+  "name": "ui-assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "generate-key": "node src/script/key-generator/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cltang923/ui-assignment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cltang923/ui-assignment/issues"
+  },
+  "homepage": "https://github.com/cltang923/ui-assignment#readme",
+  "devDependencies": {
+    "eslint": "^8.23.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.1"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "lodash": "^4.17.21"
+  }
+}
