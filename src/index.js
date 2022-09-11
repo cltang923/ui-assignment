@@ -130,6 +130,25 @@ app.post('/user', verifySignInRequest, async (req, res) => {
   return res.status(200).send({ token })
 })
 
+/*
+    * [DELETE] delete user by given acct
+*/
+app.delete('/user/:acct', verifyToken, async (req, res) => {
+  const { acct } = req.params
+  try {
+    const user = await User.findByPk(acct)
+    if (isEmpty(user)) {
+      throw new Error(`account ${acct} not exist`)
+    }
+    await User.destroy({ where: { acct } })
+  } catch (err) {
+    const errMsg = `failed to delete user ${acct} : ${err}`
+    console.error(errMsg)
+    return res.status(500).send({ errMsg })
+  }
+  return res.status(200).end()
+})
+
 app.listen(port, (err) => {
   if (err) {
     return console.error(err)
