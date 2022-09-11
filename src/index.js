@@ -78,6 +78,30 @@ app.get('/user/:acct', verifyToken, async (req, res) => {
 })
 
 /*
+    * [PUT] update user name
+*/
+app.put('/userName/:acct', verifyToken, async (req, res) => {
+  let token
+  const { acct } = req.params
+  const { name } = req.body
+  try {
+    if (isEmpty(name)) {
+      throw new Error('name is empty')
+    }
+    const user = await User.findByPk(acct)
+    if (isEmpty(user)) {
+      throw new Error(`account ${acct} not exist`)
+    }
+    await User.update({ fullname: name }, { where: { acct } })
+  } catch (err) {
+    const errMsg = `failed to update user's name of ${acct} : ${err}`
+    console.error(errMsg)
+    return res.status(500).send({ errMsg })
+  }
+  return res.status(200).send({ token })
+})
+
+/*
     * [POST] sign up. (create user)
 */
 app.post('/user/:name', verifySignInRequest, async (req, res) => {
