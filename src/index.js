@@ -149,6 +149,33 @@ app.delete('/user/:acct', verifyToken, async (req, res) => {
   return res.status(200).end()
 })
 
+/*
+    * [PUT] update user by given object
+*/
+app.put('/user/:acct', verifyToken, async (req, res) => {
+  let token
+  const { acct } = req.params
+  const { name, pwd } = req.body
+  try {
+    if (isEmpty(pwd)) {
+      throw new Error('password is empty')
+    }
+    if (isEmpty(name)) {
+      throw new Error('name is empty')
+    }
+    const user = await User.findByPk(acct)
+    if (isEmpty(user)) {
+      throw new Error(`account ${acct} not exist`)
+    }
+    await User.update({ fullname: name, pwd }, { where: { acct } })
+  } catch (err) {
+    const errMsg = `failed to update user ${acct} : ${err}`
+    console.error(errMsg)
+    return res.status(500).send({ errMsg })
+  }
+  return res.status(200).send({ token })
+})
+
 app.listen(port, (err) => {
   if (err) {
     return console.error(err)
