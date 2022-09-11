@@ -213,9 +213,11 @@ app.put('/user/:acct', verifyToken, async (req, res) => {
   return res.status(200).send({ token })
 })
 
-app.listen(port, (err) => {
+app.listen(port, async (err) => {
   if (err) {
     return console.error(err)
   }
+  // create users table before start server
+  await User.sync({ force: true })
   return console.log(`Listening at http://localhost:${port}`)
 })

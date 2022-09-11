@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=ui_test
+      - POSTGRES_USER=ui_test
+      - POSTGRES_PASSWORD=ui_test
+    healthcheck:
+      test: pg_isready -U ui_test -d ui_test
+      interval: 10s
+      timeout: 3s
+      retries: 10
+  api:
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    links:
+      - postgres
+    command: "npm run dev"

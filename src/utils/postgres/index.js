@@ -6,7 +6,7 @@ export class SQL {
   constructor () {
     const { sqlDB, sqlUser, sqlPassword } = getConfig()
     this.sequelize = new Sequelize(sqlDB, sqlUser, sqlPassword, {
-      host: 'localhost',
+      host: 'postgres',
       dialect: 'postgres'
     })
     instance = this

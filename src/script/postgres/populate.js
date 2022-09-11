@@ -1,7 +1,8 @@
 import { User } from '../../utils/postgres/data.js'
 
-const populate = async () => {
+export const populate = async () => {
   await User.sync()
+  console.log('create User table successfully')
 }
 
 populate()
