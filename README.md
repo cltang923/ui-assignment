@@ -15,3 +15,9 @@ npm run run-postgres
 ```
 npm run populate-data
 ```
+
+## Run server on local
+```
+npm run dev
+```
+the server will host on http://localhost:8080
